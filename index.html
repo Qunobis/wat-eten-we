@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Wat eten we?">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1f6fe0">
+<link rel="apple-touch-icon" href="icoon.png">
+<style>:root{background:#1f6fe0}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<title>Wat eten we?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap">
+<style>
+/* Indeling: app-gevoel. Kop met de week, één kaart per avond, tabbalk onderin (Week · Boodschappen · Bonus). */
+:root {
+  --bg: #eef2f7;
+  --kaart: #ffffff;
+  --tekst: #17233a;
+  --zacht: #5d6a80;
+  --lijn: #dde3ec;
+  --blauw: #1f6fe0;
+  --blauw-zacht: #e3edfd;
+  --bonus: #ff7a00;
+  --bonus-tekst: #ffffff;
+  --bonus-zacht: #fff1e3;
+  --groen: #1f9d55;
+  --font: "Nunito", ui-rounded, "SF Pro Rounded", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1522; --kaart: #192235; --tekst: #eef2f8; --zacht: #9aa7bd; --lijn: #28324a;
+  --blauw: #5c9bff; --blauw-zacht: #1c2c4a; --bonus: #ff8a1f; --bonus-tekst: #1a0f00; --bonus-zacht: #3a2510;
+  --groen: #3fcf7c; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f1522; --kaart: #192235; --tekst: #eef2f8; --zacht: #9aa7bd; --lijn: #28324a;
+  --blauw: #5c9bff; --blauw-zacht: #1c2c4a; --bonus: #ff8a1f; --bonus-tekst: #1a0f00; --bonus-zacht: #3a2510;
+  --groen: #3fcf7c; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--tekst); font-family: var(--font); font-size: 16px; }
+body { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); -webkit-tap-highlight-color: transparent; }
+.wrap { max-width: 560px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 24px; }
+
+header.kop { background: var(--blauw); color: #fff; padding-block: calc(22px + env(safe-area-inset-top, 0px)) 26px; border-radius: 0 0 26px 26px; }
+header.kop .wrap { padding-block: 0; }
+.kop small { display: block; font-weight: 700; opacity: .85; letter-spacing: .04em; text-transform: uppercase; font-size: 12px; }
+.kop h1 { margin: 4px 0 0; font-size: 28px; font-weight: 900; text-wrap: balance; }
+.kop p { margin: 6px 0 0; font-weight: 600; opacity: .92; font-size: 15px; }
+.besparing { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; background: rgba(255,255,255,.18); padding: 6px 12px; border-radius: 999px; font-weight: 800; font-size: 14px; }
+
+h2 { font-size: 20px; font-weight: 900; margin: 22px 0 10px; }
+.lijst { display: grid; gap: 12px; }
+
+.dag { background: var(--kaart); border-radius: 18px; padding: 14px 16px; box-shadow: 0 1px 2px rgba(15,25,45,.06); }
+.dag.vandaag { outline: 2.5px solid var(--blauw); }
+.dag-kop { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.dagnaam { font-size: 13px; font-weight: 800; color: var(--blauw); text-transform: uppercase; letter-spacing: .05em; }
+.tijd { font-size: 13px; font-weight: 700; color: var(--zacht); white-space: nowrap; }
+.gerecht { font-size: 19px; font-weight: 900; margin: 2px 0 6px; line-height: 1.25; }
+.keuken { font-size: 13px; color: var(--zacht); font-weight: 700; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: var(--bonus-zacht); border-radius: 10px; padding: 4px 8px 4px 4px; font-size: 13px; font-weight: 700; min-width: 0; }
+.sticker { background: var(--bonus); color: var(--bonus-tekst); font-weight: 900; font-size: 11px; padding: 3px 6px; border-radius: 6px; text-transform: uppercase; white-space: nowrap; }
+details { margin-top: 10px; border-top: 1px solid var(--lijn); padding-top: 8px; }
+summary { cursor: pointer; font-weight: 800; color: var(--blauw); font-size: 14px; list-style: none; padding: 4px 0; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: " ›"; }
+details[open] summary::after { content: " ⌄"; }
+details ul, details ol { margin: 6px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.5; }
+details h4 { margin: 10px 0 0; font-size: 13px; color: var(--zacht); text-transform: uppercase; letter-spacing: .05em; }
+
+.afdeling { background: var(--kaart); border-radius: 18px; padding: 6px 16px; }
+.afdeling h3 { margin: 10px 0 2px; font-size: 13px; color: var(--zacht); text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+.item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--lijn); cursor: pointer; }
+.item:last-child { border-bottom: 0; }
+.item input { appearance: none; -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--lijn); flex: none; margin: 0; display: grid; place-content: center; cursor: pointer; }
+.item input:checked { background: var(--groen); border-color: var(--groen); }
+.item input:checked::after { content: ""; width: 6px; height: 11px; border: solid #fff; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg) translate(-1px,-1px); }
+.item input:focus-visible { outline: 2px solid var(--blauw); outline-offset: 2px; }
+.item .naam { flex: 1; min-width: 0; font-weight: 700; font-size: 16px; }
+.item .voor { display: block; font-size: 12px; color: var(--zacht); font-weight: 600; }
+.item.af .naam { text-decoration: line-through; color: var(--zacht); }
+.voortgang { font-weight: 800; color: var(--zacht); font-size: 14px; margin: -4px 0 10px; }
+.knop { appearance: none; border: 0; background: var(--blauw-zacht); color: var(--blauw); font: inherit; font-weight: 800; padding: 10px 14px; border-radius: 12px; cursor: pointer; }
+
+.bonus-item { background: var(--kaart); border-radius: 14px; padding: 12px 14px; display: flex; gap: 12px; align-items: center; }
+.bonus-item .naam { flex: 1; min-width: 0; font-weight: 700; font-size: 15px; }
+.bonus-item .waar { display: block; font-size: 12px; color: var(--zacht); font-weight: 600; }
+.uitleg { color: var(--zacht); font-size: 14px; font-weight: 600; line-height: 1.45; margin: 0 0 12px; }
+
+nav.tabs { position: fixed; left: 0; right: 0; bottom: 0; background: var(--kaart); border-top: 1px solid var(--lijn); display: grid; grid-template-columns: repeat(3, 1fr); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); z-index: 5; }
+nav.tabs button { appearance: none; border: 0; background: none; font: inherit; color: var(--zacht); font-weight: 800; font-size: 12px; padding: 10px 4px 12px; display: grid; justify-items: center; gap: 4px; cursor: pointer; }
+nav.tabs button svg { width: 24px; height: 24px; }
+nav.tabs button[aria-selected="true"] { color: var(--blauw); }
+nav.tabs .teller { background: var(--bonus); color: var(--bonus-tekst); border-radius: 999px; font-size: 10px; padding: 0 6px; margin-left: 2px; }
+@media (prefers-reduced-motion: no-preference) { .dag, .item { transition: opacity .15s; } }
+</style>
+
+<header class="kop"><div class="wrap">
+  <small id="weeklabel"></small>
+  <h1>Wat eten we deze week?</h1>
+  <p id="kopregel"></p>
+  <span class="besparing" id="bonusteller"></span>
+</div></header>
+
+<main class="wrap">
+  <section id="tab-week"></section>
+  <section id="tab-lijst" hidden></section>
+  <section id="tab-bonus" hidden></section>
+</main>
+
+<nav class="tabs" role="tablist">
+  <button role="tab" data-tab="week" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Week</button>
+  <button role="tab" data-tab="lijst" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h11l2-8H6.2"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg><span>Boodschappen <span class="teller" id="lijstteller"></span></span></button>
+  <button role="tab" data-tab="bonus" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>Bonus</button>
+</nav>
+
+<script id="menu-data" type="application/json">{"start": "2026-11-09", "eind": "2026-11-15", "personen": 4, "max_minuten": 30, "dagen": [{"dag": "Maandag", "datum": "2026-11-09", "gerecht": "Hutspot met rookworst", "keuken": "Hollands", "minuten": 30, "bonus": [{"wat": "Winterpeen 1 kilo", "korting": "voor 0.99"}], "ingredienten": ["1,5 kg kruimige aardappelen", "1 kg winterpeen", "3 uien", "2 rookworsten", "klontje boter, scheutje melk", "peper, zout, nootmuskaat"], "stappen": ["Schil de aardappelen en snijd ze in stukken. Snijd de peen in plakjes en de uien in ringen.", "Kook alles samen in een laagje water met zout in 20 min gaar. Verwarm intussen de rookworst.", "Giet af, stamp fijn met boter en melk en breng op smaak."]}, {"dag": "Dinsdag", "datum": "2026-11-10", "gerecht": "Pasta bolognese", "keuken": "Italiaans", "minuten": 25, "bonus": [{"wat": "Gemengd gehakt 500 g", "korting": "voor 3.49"}, {"wat": "Mutti tomaten", "korting": "2e halve prijs"}], "ingredienten": ["500 g spaghetti", "500 g gemengd gehakt", "2 blikken Mutti gepelde of gehakte tomaten", "1 ui, 2 tenen knoflook", "1 winterpeen (over van maandag)", "geraspte kaas"], "stappen": ["Snipper ui, knoflook en peen fijn en bak ze 3 min in olie.", "Bak het gehakt rul mee, voeg de tomaten toe en laat 15 min zachtjes koken. Kook intussen de spaghetti.", "Breng op smaak met zout, peper en oregano en serveer met kaas."]}, {"dag": "Woensdag", "datum": "2026-11-11", "gerecht": "Rijst met makreel en komkommer", "keuken": "Snel", "minuten": 20, "bonus": [{"wat": "Gerookte makreelfilet", "korting": "25% korting"}, {"wat": "Bio komkommer", "korting": "2 voor 2.49"}, {"wat": "Avocado", "korting": "2 voor 1.99"}], "ingredienten": ["300 g rijst", "3 gerookte makreelfilets", "1 komkommer", "2 avocado's", "lente-ui, sojasaus, sesamzaad", "eventueel een gebakken eitje"], "stappen": ["Kook de rijst.", "Snijd komkommer en avocado in blokjes, de lente-ui in ringetjes. Pluk de makreel in stukken.", "Schep rijst in kommen, leg alles erop en maak af met sojasaus en sesamzaad."]}, {"dag": "Donderdag", "datum": "2026-11-12", "gerecht": "Pizza", "keuken": "Italiaans", "minuten": 15, "bonus": [{"wat": "AH verse pizza's", "korting": "2 voor 12.00"}, {"wat": "Slaverrijkers", "korting": "2 voor 5.00"}], "ingredienten": ["2 AH verse pizza's (of 2 Crosta Mollica uit de diepvries, 2 euro korting)", "1 zak slaverrijker", "dressing"], "stappen": ["Verwarm de oven voor volgens de verpakking.", "Bak de pizza's af.", "Serveer met een snelle salade."]}, {"dag": "Vrijdag", "datum": "2026-11-13", "gerecht": "Nasi goreng met kip", "keuken": "Indonesisch", "minuten": 30, "bonus": [{"wat": "Kip vrije uitloop", "korting": "25% korting"}, {"wat": "Conimex boemboe", "korting": "2e halve prijs"}], "ingredienten": ["300 g rijst (liefst al gekookt)", "500 g kipfilet of kipdijfilet", "1 zakje Conimex boemboe nasi goreng", "1 prei of 200 g spitskool", "4 eieren", "kroepoek, atjar of komkommer"], "stappen": ["Kook de rijst en laat hem afkoelen (of gebruik rijst van woensdag).", "Bak de kip in blokjes bruin, voeg de boemboe toe en daarna de groente.", "Schep de rijst erdoor en bak 5 min mee. Bak er een spiegelei bij."], "notitie": "vrijdag, 30 min"}, {"dag": "Zaterdag", "datum": "2026-11-14", "gerecht": "Aardappeltjes met rode bieten en varkenshaas", "keuken": "Hollands", "minuten": 35, "bonus": [{"wat": "Varkenshaas", "korting": "10% korting"}, {"wat": "Hak rode bieten", "korting": "2 voor 3.99"}], "ingredienten": ["1 kg krieltjes", "1 varkenshaas (± 600 g)", "1 pot Hak rode bieten", "1 ui", "boter, tijm, peper, zout"], "stappen": ["Bak de krieltjes in 25 min goudbruin in een pan met boter (of in de airfryer).", "Bak de varkenshaas rondom bruin en laat hem 15 min op laag vuur garen. Laat 5 min rusten en snijd in plakken.", "Verwarm de bieten met de gesnipperde ui en een klontje boter."]}, {"dag": "Zondag", "datum": "2026-11-15", "gerecht": "Rode kippensoep", "keuken": "Huisrecept", "minuten": 90, "notitie": "zondag, tijd genoeg", "bonus": [{"wat": "Kip vrije uitloop", "korting": "25% korting"}], "ingredienten": ["1 kg kippenpoten", "1 stuk gember (± 5 cm)", "2 uien, 3 tenen knoflook", "1 blik tomaten of tomatenpuree", "1 rode peper", "brood erbij"], "stappen": ["Bak ui, knoflook, gember en peper aan, voeg tomaat toe.", "Leg de kippenpoten erin, schenk er 2 liter water bij en laat 1 uur zachtjes trekken.", "Haal het vlees van het bot, doe het terug in de soep en breng op smaak."]}], "boodschappen": [{"afdeling": "Groente en aardappelen", "items": [{"naam": "Kruimige aardappelen 1,5 kg", "voor": "maandag"}, {"naam": "Winterpeen 1 kilo", "voor": "maandag, dinsdag", "korting": "0.99"}, {"naam": "Krieltjes 1 kg", "voor": "zaterdag"}, {"naam": "Uien (net)", "voor": "hele week"}, {"naam": "Knoflook", "voor": "dinsdag, zondag"}, {"naam": "Gember", "voor": "zondag"}, {"naam": "Rode peper", "voor": "zondag"}, {"naam": "Lente-ui", "voor": "woensdag"}, {"naam": "Bio komkommer (2)", "voor": "woensdag, vrijdag", "korting": "2 voor 2.49"}, {"naam": "Avocado (2)", "voor": "woensdag", "korting": "2 voor 1.99"}, {"naam": "Prei of spitskool", "voor": "vrijdag"}, {"naam": "Slaverrijker", "voor": "donderdag", "korting": "2 voor 5.00"}]}, {"afdeling": "Vlees en vis", "items": [{"naam": "Rookworst (2)", "voor": "maandag"}, {"naam": "Gemengd gehakt 500 g", "voor": "dinsdag", "korting": "3.49"}, {"naam": "Gerookte makreelfilets (3)", "voor": "woensdag", "korting": "25%"}, {"naam": "Kipfilet 500 g (vrije uitloop)", "voor": "vrijdag", "korting": "25%"}, {"naam": "Varkenshaas", "voor": "zaterdag", "korting": "10%"}, {"naam": "Kippenpoten 1 kg", "voor": "zondag"}]}, {"afdeling": "Kant-en-klaar", "items": [{"naam": "AH verse pizza's (2)", "voor": "donderdag", "korting": "2 voor 12.00"}]}, {"afdeling": "Pasta, rijst en wereldkeuken", "items": [{"naam": "Spaghetti 500 g", "voor": "dinsdag"}, {"naam": "Rijst 1 kg", "voor": "woensdag, vrijdag"}, {"naam": "Mutti tomaten (2 blikken) + 1 extra voor zondag", "voor": "dinsdag, zondag", "korting": "2e halve prijs"}, {"naam": "Conimex boemboe nasi goreng", "voor": "vrijdag", "korting": "2e halve prijs"}, {"naam": "Kroepoek", "voor": "vrijdag"}, {"naam": "Hak rode bieten", "voor": "zaterdag", "korting": "2 voor 3.99"}]}, {"afdeling": "Zuivel en eieren", "items": [{"naam": "Eieren (6)", "voor": "woensdag, vrijdag"}, {"naam": "Geraspte kaas", "voor": "dinsdag", "korting": "2 voor 5.00"}]}], "extra_bonus": [{"titel": "AH Bakkersbrood Les Pains heel", "categorie": "Bakkerij", "korting": "1 + 1 gratis"}, {"titel": "AH Bakkersbollen", "categorie": "Bakkerij", "korting": "2 voor 3.00"}, {"titel": "AH Goudse plakken", "categorie": "Kaas", "korting": "2 voor 5.50"}, {"titel": "Alle AH Zaanlander", "categorie": "Kaas", "korting": "25% korting"}, {"titel": "Philadelphia 175-200 g", "categorie": "Kaas", "korting": "voor 1.99"}, {"titel": "AH Scharrelkipfiletvleeswaren", "categorie": "Vleeswaren", "korting": "100 g voor 2.39"}, {"titel": "AH Filet americain 150 g", "categorie": "Vleeswaren", "korting": "voor 2.49"}, {"titel": "Chocomel literpakken", "categorie": "Zuivel", "korting": "1 + 1 gratis"}, {"titel": "Blue Band", "categorie": "Zuivel", "korting": "25% korting"}, {"titel": "Hand- en perssinaasappelen 2 kilo", "categorie": "Fruit", "korting": "2 stapelen voor 3.99"}, {"titel": "Mandarijnen groot net", "categorie": "Fruit", "korting": "30% korting"}, {"titel": "Chiquita bananen", "categorie": "Fruit", "korting": "2 voor 3.50"}, {"titel": "AH SPRANK appels", "categorie": "Fruit", "korting": "30% korting"}, {"titel": "Iglo Fish Cuisine en Fish & Fun", "categorie": "Diepvries", "korting": "1 + 1 gratis"}, {"titel": "Kwekkeboom oven- en airfryersnacks", "categorie": "Diepvries", "korting": "2 voor 5.99"}]}</script>
+<script>
+const M = JSON.parse(document.getElementById('menu-data').textContent);
+const opslag = 'weekmenu-' + M.start;
+let af = {};
+try { af = JSON.parse(localStorage.getItem(opslag) || '{}'); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(opslag, JSON.stringify(af)); } catch (e) {} };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const datum = s => new Date(s + 'T12:00:00').toLocaleDateString('nl-NL', { day: 'numeric', month: 'long' });
+
+document.getElementById('weeklabel').textContent = `Bonusweek ${datum(M.start)} – ${datum(M.eind)}`;
+document.getElementById('kopregel').textContent = `Voor ${M.personen} personen · doordeweeks max ${M.max_minuten} min`;
+const nBonus = M.dagen.reduce((n, d) => n + (d.bonus || []).length, 0);
+document.getElementById('bonusteller').textContent = `${nBonus} ingrediënten in de bonus`;
+
+const vandaag = new Date().toISOString().slice(0, 10);
+document.getElementById('tab-week').innerHTML = '<h2>Weekmenu</h2><div class="lijst">' + M.dagen.map(d => `
+  <article class="dag${d.datum === vandaag ? ' vandaag' : ''}">
+    <div class="dag-kop"><span class="dagnaam">${esc(d.dag)} ${esc(datum(d.datum))}</span><span class="tijd">${esc(d.minuten)} min</span></div>
+    <div class="gerecht">${esc(d.gerecht)}</div>
+    <div class="keuken">${esc(d.keuken)}${d.notitie ? ' · ' + esc(d.notitie) : ''}</div>
+    ${(d.bonus || []).length ? '<div class="chips">' + d.bonus.map(b => `<span class="chip"><span class="sticker">${esc(b.korting)}</span>${esc(b.wat)}</span>`).join('') + '</div>' : ''}
+    <details><summary>Ingrediënten en bereiding</summary>
+      <h4>Ingrediënten (${esc(M.personen)} pers.)</h4><ul>${d.ingredienten.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+      <h4>Zo maak je het</h4><ol>${d.stappen.map(s => `<li>${esc(s)}</li>`).join('')}</ol>
+    </details>
+  </article>`).join('') + '</div>';
+
+function tekenLijst() {
+  const alle = M.boodschappen.flatMap(a => a.items.map(i => i.naam));
+  const klaar = alle.filter(n => af[n]).length;
+  document.getElementById('lijstteller').textContent = alle.length - klaar || '';
+  document.getElementById('tab-lijst').innerHTML = `<h2>Boodschappen</h2>
+    <p class="voortgang">${klaar} van ${alle.length} in je mandje</p>
+    <div class="lijst">` + M.boodschappen.map((a, ai) => `
+      <div class="afdeling"><h3>${esc(a.afdeling)}</h3>` + a.items.map((i, ii) => `
+        <label class="item${af[i.naam] ? ' af' : ''}" for="b-${ai}-${ii}">
+          <input type="checkbox" id="b-${ai}-${ii}" data-naam="${esc(i.naam)}" ${af[i.naam] ? 'checked' : ''}>
+          <span class="naam">${esc(i.naam)}${i.voor ? `<span class="voor">${esc(i.voor)}</span>` : ''}</span>
+          ${i.korting ? `<span class="sticker">${esc(i.korting)}</span>` : ''}
+        </label>`).join('') + '</div>').join('') +
+    `</div><p style="margin-top:16px"><button class="knop" id="leeg" type="button">Alles weer leegmaken</button></p>`;
+}
+document.getElementById('tab-lijst').addEventListener('change', e => {
+  if (e.target.matches('input[data-naam]')) { af[e.target.dataset.naam] = e.target.checked; if (!e.target.checked) delete af[e.target.dataset.naam]; bewaar(); tekenLijst(); }
+});
+document.getElementById('tab-lijst').addEventListener('click', e => { if (e.target.id === 'leeg') { af = {}; bewaar(); tekenLijst(); } });
+tekenLijst();
+
+document.getElementById('tab-bonus').innerHTML = `<h2>Ook in de bonus</h2>
+  <p class="uitleg">Handig voor ontbijt, lunch en de voorraadkast. Geldig ${esc(datum(M.start))} t/m ${esc(datum(M.eind))}.</p>
+  <div class="lijst">` + M.extra_bonus.map(b => `
+    <div class="bonus-item"><span class="naam">${esc(b.titel)}<span class="waar">${esc(b.categorie)}</span></span><span class="sticker">${esc(b.korting)}</span></div>`).join('') + '</div>';
+
+const knoppen = document.querySelectorAll('nav.tabs button');
+function toon(tab) {
+  knoppen.forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
+  ['week', 'lijst', 'bonus'].forEach(t => document.getElementById('tab-' + t).hidden = t !== tab);
+  try { localStorage.setItem('weekmenu-tab', tab); } catch (e) {}
+  window.scrollTo(0, 0);
+}
+knoppen.forEach(b => b.addEventListener('click', () => toon(b.dataset.tab)));
+try { const t = localStorage.getItem('weekmenu-tab'); if (t) toon(t); } catch (e) {}
+</script>
+
+</body>
+</html>
