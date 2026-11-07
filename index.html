@@ -24,6 +24,7 @@
   --zacht: #5d6a80;
   --lijn: #dde3ec;
   --blauw: #1f6fe0;
+  --kop: #1f6fe0;
   --blauw-zacht: #e3edfd;
   --bonus: #ff7a00;
   --bonus-tekst: #ffffff;
@@ -33,11 +34,11 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0f1522; --kaart: #192235; --tekst: #eef2f8; --zacht: #9aa7bd; --lijn: #28324a;
-  --blauw: #5c9bff; --blauw-zacht: #1c2c4a; --bonus: #ff8a1f; --bonus-tekst: #1a0f00; --bonus-zacht: #3a2510;
+  --blauw: #5c9bff; --kop: #1b4d9e; --blauw-zacht: #1c2c4a; --bonus: #ff8a1f; --bonus-tekst: #1a0f00; --bonus-zacht: #3a2510;
   --groen: #3fcf7c; color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #0f1522; --kaart: #192235; --tekst: #eef2f8; --zacht: #9aa7bd; --lijn: #28324a;
-  --blauw: #5c9bff; --blauw-zacht: #1c2c4a; --bonus: #ff8a1f; --bonus-tekst: #1a0f00; --bonus-zacht: #3a2510;
+  --blauw: #5c9bff; --kop: #1b4d9e; --blauw-zacht: #1c2c4a; --bonus: #ff8a1f; --bonus-tekst: #1a0f00; --bonus-zacht: #3a2510;
   --groen: #3fcf7c; color-scheme: dark; }
 
 * { box-sizing: border-box; }
@@ -45,7 +46,7 @@ html, body { background: var(--bg); color: var(--tekst); font-family: var(--font
 body { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); -webkit-tap-highlight-color: transparent; }
 .wrap { max-width: 560px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 24px; }
 
-header.kop { background: var(--blauw); color: #fff; padding-block: calc(22px + env(safe-area-inset-top, 0px)) 26px; border-radius: 0 0 26px 26px; }
+header.kop { background: var(--kop); color: #fff; padding-block: calc(22px + env(safe-area-inset-top, 0px)) 26px; border-radius: 0 0 26px 26px; }
 header.kop .wrap { padding-block: 0; }
 .kop small { display: block; font-weight: 700; opacity: .85; letter-spacing: .04em; text-transform: uppercase; font-size: 12px; }
 .kop h1 { margin: 4px 0 0; font-size: 28px; font-weight: 900; text-wrap: balance; }
